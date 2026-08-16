@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio Saya</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.7/dist/umd/supabase.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ===== THEME VARIABLES ===== */
+        :root {
+            --primary: #FF7F00;
+            --primary-dark: #e66a00;
+            --primary-light: #fff4e6;
+            
+            --bg: #ffffff;
+            --bg-secondary: #f9f9f9;
+            --card-bg: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #eeeeee;
+            --shadow: 0 4px 15px rgba(0,0,0,0.08);
+            --nav-bg: #ffffff;
+            --input-bg: #ffffff;
+            --input-border: #dddddd;
+        }
+
+        /* ===== DARK MODE ===== */
+        body.dark {
+            --bg: #121212;
+            --bg-secondary: #1e1e1e;
+            --card-bg: #252525;
+            --text: #e0e0e0;
+            --text-light: #aaaaaa;
+            --border: #333333;
+            --shadow: 0 4px 15px rgba(0,0,0,0.4);
+            --nav-bg: #1a1a1a;
+            --input-bg: #2a2a2a;
+            --input-border: #444444;
+        }
+
+        /* ===== THEME COLORS ===== */
+        body.theme-blue { --primary: #2563eb; --primary-dark: #1d4ed8; --primary-light: #eff6ff; }
+        body.theme-green { --primary: #10b981; --primary-dark: #059669; --primary-light: #ecfdf5; }
+        body.theme-purple { --primary: #8b5cf6; --primary-dark: #7c3aed; --primary-light: #f5f3ff; }
+        body.theme-red { --primary: #ef4444; --primary-dark: #dc2626; --primary-light: #fef2f2; }
+        body.theme-pink { --primary: #ec4899; --primary-dark: #db2777; --primary-light: #fdf2f8; }
+        body.theme-orange { --primary: #FF7F00; --primary-dark: #e66a00; --primary-light: #fff4e6; }
+
+        /* ===== BASE ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg); color: var(--text); line-height: 1.6; transition: background .3s, color .3s; }
+        a { text-decoration: none; color: inherit; }
+        img { max-width: 100%; image-rendering: -webkit-optimize-contrast; }
+        button { cursor: pointer; font-family: inherit; }
+
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+        section { padding: 70px 0; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 2.5rem; position: relative; }
+        .section-title::after { content:''; display:block; width:60px; height:4px; background:var(--primary); margin:10px auto 0; border-radius:2px; }
+
+        /* ===== NAVBAR ===== */
+        nav { background: var(--nav-bg); box-shadow: var(--shadow); position: sticky; top:0; z-index:100; transition: background .3s; }
+        .nav-inner { display:flex; justify-content:space-between; align-items:center; height:65px; }
+        .logo { font-size:1.4rem; font-weight:bold; color:var(--primary); }
+        .nav-links { display:flex; gap:20px; align-items:center; list-style:none; }
+        .nav-links a { font-weight:500; transition:.3s; }
+        .nav-links a:hover { color: var(--primary); }
+        
+        .btn { background: var(--primary); color:#fff; border:none; padding:9px 20px; border-radius:25px; font-weight:600; transition:.3s; display:inline-flex; align-items:center; gap:8px; }
+        .btn:hover { background: var(--primary-dark); transform:translateY(-2px); }
+        .btn-sm { padding: 7px 15px; font-size: 0.85rem; }
+        .btn-icon { padding: 8px 12px; border-radius: 50%; }
+        .btn-gray { background:#e9e9e9; color:#333; }
+        body.dark .btn-gray { background:#3a3a3a; color:#e0e0e0; }
+        .btn-red { background:#e74c3c; }
+        .btn-red:hover { background:#c0392b; }
+
+        /* Language selector */
+        .lang-select { background: var(--input-bg); color: var(--text); border: 1px solid var(--input-border); padding: 6px 10px; border-radius: 20px; font-size: .85rem; cursor: pointer; }
+
+        /* ===== HERO ===== */
+        .hero { display:flex; align-items:center; gap:40px; min-height:80vh; }
+        .hero-text { flex:1; }
+        .hero-text h3 { color: var(--primary); margin-bottom:5px; }
+        .hero-text h1 { font-size:2.8rem; margin-bottom:8px; }
+        .hero-text h2 { color: var(--primary); font-size:1.3rem; margin-bottom:15px; font-weight:600; }
+        .hero-text p { color: var(--text-light); max-width:500px; margin-bottom:25px; }
+        .hero-img { flex:1; display:flex; justify-content:center; }
+        
+        .profile-pic { 
+            width: 320px; height: 320px; object-fit: cover; object-position: center;
+            border-radius: 50%; border: 6px solid var(--primary); box-shadow: var(--shadow);
+            background: var(--bg-secondary);
+        }
+        
+        .social-icons { display:flex; gap:15px; }
+        .social-icons a { width:42px; height:42px; background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; border-radius:50%; color:var(--primary); font-size:1.1rem; transition:.3s; box-shadow:var(--shadow); }
+        .social-icons a:hover { background:var(--primary); color:#fff; }
+
+        /* ===== SKILLS ===== */
+        .skills-wrap { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; }
+        .skill-tag { background:var(--bg-secondary); padding:10px 24px; border-radius:25px; font-weight:600; border:2px solid transparent; transition:.3s; }
+        .skill-tag:hover { border-color:var(--primary); color:var(--primary); }
+
+        /* ===== CARDS ===== */
+        .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:25px; }
+        .card, .article-card { background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); transition:.3s; }
+        .card:hover, .article-card:hover { transform:translateY(-6px); }
+        .card img { width:100%; height:190px; object-fit:cover; background:var(--bg-secondary); }
+        .card-body { padding:20px; }
+        .card-body h3 { color:var(--primary); margin-bottom:8px; }
+        .card-body p { color:var(--text-light); font-size:.95rem; }
+
+        .article-card img { width:100%; height:160px; object-fit:cover; background:var(--bg-secondary); }
+        .article-card .card-body { padding:15px; }
+        .article-card h3 { font-size:1rem; margin-bottom:8px; color:var(--text); }
+        .article-meta { display:flex; justify-content:space-between; font-size:.75rem; color:#999; margin-bottom:8px; }
+        .article-meta .author { color:var(--primary); font-weight:600; }
+        .article-excerpt { font-size:.85rem; color:var(--text-light); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+
+        /* ===== CONTACT ===== */
+        .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+        .contact-info h3 { color: var(--primary); margin-bottom: 15px; }
+        .contact-info p { color: var(--text-light); margin-bottom: 20px; }
+        .contact-item { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; color: var(--text-light); }
+        .contact-item i { color: var(--primary); font-size: 1.2rem; width: 24px; }
+        
+        .contact-form { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: var(--shadow); }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .9rem; }
+        .form-group input, .form-group textarea, .form-group select { 
+            width: 100%; padding: 10px 12px; border: 1px solid var(--input-border); 
+            border-radius: 8px; font-family: inherit; font-size: .95rem; 
+            background: var(--input-bg); color: var(--text); transition: border .3s;
+        }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
+
+        /* ===== FOOTER ===== */
+        footer { background: var(--bg-secondary); padding: 35px 0; text-align: center; color: var(--text-light); transition: background .3s; }
+        .visitor-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--card-bg); padding: 8px 18px; border-radius: 20px; margin-bottom: 15px; box-shadow: var(--shadow); font-size: .9rem; }
+        .visitor-badge i { color: var(--primary); }
+
+        /* ===== MODAL ===== */
+        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+        .modal.active { display:flex; }
+        .modal-box { background:var(--card-bg); border-radius:16px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; position:relative; animation:pop .25s; }
+        @keyframes pop { from{transform:scale(.95);opacity:0} to{transform:scale(1);opacity:1} }
+        .modal-head { background:var(--primary); color:#fff; padding:18px 25px; border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center; }
+        .modal-body { padding:25px; }
+        .close-x { background:none; border:none; color:#fff; font-size:1.4rem; line-height:1; }
+
+        /* ===== ADMIN TABS ===== */
+        .tabs { display:flex; gap:5px; border-bottom:2px solid var(--border); margin-bottom:20px; flex-wrap:wrap; }
+        .tab-btn { background:none; border:none; padding:10px 16px; font-weight:600; color:var(--text-light); border-bottom:3px solid transparent; margin-bottom:-2px; font-size:.9rem; }
+        .tab-btn.active { color:var(--primary); border-bottom-color:var(--primary); }
+        .tab-panel { display:none; }
+        .tab-panel.active { display:block; }
+
+        .form-row { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+
+        .upload-area { border:2px dashed var(--input-border); border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:.3s; }
+        .upload-area:hover { border-color:var(--primary); background:var(--primary-light); }
+        .upload-preview { max-height:200px; max-width:100%; border-radius:8px; margin-top:10px; }
+
+        .list-item { display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:var(--bg-secondary); border-radius:10px; margin-bottom:10px; gap:10px; }
+        .list-item-info { flex:1; min-width:0; }
+        .list-item-info strong { display:block; }
+        .list-item-info small { color:var(--text-light); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .list-actions { display:flex; gap:6px; flex-shrink:0; }
+        .add-row { display:flex; gap:10px; margin-bottom:15px; }
+        .add-row input { flex:1; padding:10px 12px; border:1px solid var(--input-border); border-radius:8px; background:var(--input-bg); color:var(--text); }
+
+        .alert { padding:12px 15px; border-radius:8px; margin-bottom:15px; font-size:.9rem; display:none; }
+        .alert.success { background:#d4edda; color:#155724; display:block; }
+        .alert.error { background:#f8d7da; color:#721c24; display:block; }
+        body.dark .alert.success { background:#1e4620; color:#a3e635; }
+        body.dark .alert.error { background:#4a1c1c; color:#fca5a5; }
+
+        .empty-state { text-align:center; padding:30px; color:#999; grid-column: 1/-1; }
+
+        /* Theme picker */
+        .theme-options { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+        .theme-dot { width: 45px; height: 45px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: .2s; position: relative; }
+        .theme-dot:hover { transform: scale(1.1); }
+        .theme-dot.selected { border-color: var(--text); transform: scale(1.1); }
+        .theme-dot.selected::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
+
+        .unread-badge { background: #e74c3c; color: #fff; border-radius: 10px; padding: 1px 8px; font-size: .7rem; margin-left: 5px; }
+
+        @media (max-width:768px) {
+            .hero { flex-direction:column-reverse; text-align:center; }
+            .hero-text p { margin:0 auto 25px; }
+            .social-icons { justify-content:center; }
+            .profile-pic { width:230px; height:230px; }
+            .nav-links li:not(:last-child):not(:nth-last-child(2)):not(:nth-last-child(3)) { display:none; }
+            .form-row { grid-template-columns:1fr; }
+            .contact-wrap { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="container nav-inner">
+        <div class="logo">My<span style="color:var(--text)">Porto</span>.</div>
+        <ul class="nav-links">
+            <li><a href="#about" data-i18n="nav_about">Tentang</a></li>
+            <li><a href="#skills" data-i18n="nav_skills">Skill</a></li>
+            <li><a href="#projects" data-i18n="nav_projects">Projek</a></li>
+            <li><a href="#articles" data-i18n="nav_articles">Artikel</a></li>
+            <li><a href="#contact" data-i18n="nav_contact">Kontak</a></li>
+            <li>
+                <select class="lang-select" id="langSelect" onchange="changeLanguage(this.value)">
+                    <option value="id">🇮🇩 ID</option>
+                    <option value="en">🇬🇧 EN</option>
+                </select>
+            </li>
+            <li><button class="btn btn-icon" id="darkToggle" onclick="toggleDark()" title="Dark Mode"><i class="fas fa-moon"></i></button></li>
+            <li><button class="btn btn-sm" id="loginBtn"><i class="fas fa-lock"></i> <span data-i18n="login">Login</span></button></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section id="about" class="container hero">
+    <div class="hero-text">
+        <h3 data-i18n="hello">Halo, Saya</h3>
+        <h1 id="displayName">Loading...</h1>
+        <h2 id="displayRole">Loading...</h2>
+        <p id="displayBio">Loading...</p>
+        <div class="social-icons" id="socialIcons"></div>
+    </div>
+    <div class="hero-img">
+        <img id="displayImage" src="" alt="Profil" class="profile-pic">
+    </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills" style="background:var(--bg-secondary)">
+    <div class="container">
+        <h2 class="section-title" data-i18n="skills_title">Keahlian</h2>
+        <div class="skills-wrap" id="skillsContainer"></div>
+    </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+    <div class="container">
+        <h2 class="section-title" data-i18n="projects_title">Projek Terbaru</h2>
+        <div class="grid" id="projectsContainer"></div>
+    </div>
+</section>
+
+<!-- ARTICLES -->
+<section id="articles" style="background:var(--bg-secondary)">
+    <div class="container">
+        <h2 class="section-title" data-i18n="articles_title">Artikel</h2>
+        <div class="grid" id="articlesContainer"></div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+    <div class="container">
+        <h2 class="section-title" data-i18n="contact_title">Hubungi Saya</h2>
+        <div class="contact-wrap">
+            <div class="contact-info">
+                <h3 data-i18n="contact_subtitle">Mari Bekerja Sama!</h3>
+                <p data-i18n="contact_desc">Tertarik berkolaborasi atau punya pertanyaan? Kirim pesan melalui form di samping.</p>
+                <div id="contactInfoList"></div>
+            </div>
+            <div class="contact-form">
+                <div class="alert" id="contactAlert"></div>
+                <div class="form-group">
+                    <label data-i18n="form_name">Nama</label>
+                    <input type="text" id="contactName" data-i18n-placeholder="form_name_ph" placeholder="Nama Anda">
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="contactEmail" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_subject">Subjek</label>
+                    <input type="text" id="contactSubject" data-i18n-placeholder="form_subject_ph" placeholder="Topik pesan">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="form_message">Pesan</label>
+                    <textarea id="contactMessage" rows="4" data-i18n-placeholder="form_message_ph" placeholder="Tulis pesan Anda..."></textarea>
+                </div>
+                <button class="btn" onclick="sendContact()" style="width:100%">
+                    <i class="fas fa-paper-plane"></i> <span data-i18n="form_send">Kirim Pesan</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="container">
+        <div class="visitor-badge">
+            <i class="fas fa-eye"></i>
+            <span><span id="visitorCount">0</span> <span data-i18n="visitors">pengunjung</span></span>
+        </div>
+        <p>&copy; 2026 MyPortfolio. Built with ❤️ & Supabase.</p>
+    </div>
+</footer>
+
+<!-- MODAL LOGIN -->
+<div class="modal" id="loginModal">
+    <div class="modal-box" style="max-width:420px">
+        <div class="modal-head">
+            <h3><i class="fas fa-user-shield"></i> <span data-i18n="admin_login">Admin Login</span></h3>
+            <button class="close-x" onclick="closeModal('loginModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="alert" id="loginAlert"></div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="authEmail" placeholder="admin@email.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="authPass" placeholder="••••••••">
+            </div>
+            <button class="btn" style="width:100%" onclick="handleLogin()">
+                <i class="fas fa-sign-in-alt"></i> <span data-i18n="login_enter">Masuk Panel</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ADMIN PANEL -->
+<div class="modal" id="adminModal">
+    <div class="modal-box">
+        <div class="modal-head">
+            <h3><i class="fas fa-cog"></i> <span data-i18n="admin_panel">Panel Admin</span></h3>
+            <button class="close-x" onclick="closeModal('adminModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="profile"><i class="fas fa-user"></i> <span data-i18n="tab_profile">Profil</span></button>
+                <button class="tab-btn" data-tab="skills"><i class="fas fa-code"></i> Skills</button>
+                <button class="tab-btn" data-tab="projects"><i class="fas fa-briefcase"></i> <span data-i18n="tab_projects">Projek</span></button>
+                <button class="tab-btn" data-tab="articles"><i class="fas fa-newspaper"></i> <span data-i18n="tab_articles">Artikel</span></button>
+                <button class="tab-btn" data-tab="messages"><i class="fas fa-envelope"></i> <span data-i18n="tab_messages">Pesan</span><span class="unread-badge" id="msgBadge" style="display:none">0</span></button>
+                <button class="tab-btn" data-tab="settings"><i class="fas fa-palette"></i> <span data-i18n="tab_settings">Tema</span></button>
+            </div>
+
+            <!-- TAB PROFIL -->
+            <div class="tab-panel active" id="tab-profile">
+                <div class="form-group">
+                    <label data-i18n="profile_photo">Foto Profil</label>
+                    <div class="upload-area" onclick="document.getElementById('profileFile').click()">
+                        <i class="fas fa-cloud-upload-alt" style="font-size:2rem; color:var(--primary)"></i>
+                        <p style="color:var(--text-light); margin-top:8px" data-i18n="click_upload">Klik untuk upload foto</p>
+                        <img id="profilePreview" class="upload-preview" style="display:none">
+                    </div>
+                    <input type="file" id="profileFile" accept="image/*" style="display:none" onchange="previewImage(this, 'profilePreview')">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label data-i18n="full_name">Nama Lengkap</label>
+                        <input type="text" id="editName">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="role">Role / Jabatan</label>
+                        <input type="text" id="editRole">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label data-i18n="bio">Bio Singkat</label>
+                    <textarea id="editBio" rows="3"></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <input type="email" id="editEmail">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-github"></i> GitHub</label>
+                        <input type="text" id="editGithub">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label><i class="fab fa-linkedin"></i> LinkedIn</label>
+                        <input type="text" id="editLinkedin">
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fab fa-instagram"></i> Instagram</label>
+                        <input type="text" id="editInstagram">
+                    </div>
+                </div>
+                <button class="btn" onclick="saveProfile()"><i class="fas fa-save"></i> <span data-i18n="save_profile">Simpan Profil</span></button>
+                <button class="btn btn-red" onclick="handleLogout()" style="margin-left:8px"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+
+            <!-- TAB SKILLS -->
+            <div class="tab-panel" id="tab-skills">
+                <div class="add-row">
+                    <input type="text" id="newSkill" placeholder="Tambah skill baru..." onkeypress="if(event.key==='Enter') addSkill()">
+                    <button class="btn" onclick="addSkill()"><i class="fas fa-plus"></i></button>
+                </div>
+                <div id="adminSkillsList"></div>
+                <button class="btn" onclick="saveSkills()"><i class="fas fa-save"></i> <span data-i18n="save_skills">Simpan Skills</span></button>
+            </div>
+
+            <!-- TAB PROJECTS -->
+            <div class="tab-panel" id="tab-projects">
+                <button class="btn" onclick="showProjectForm()" style="margin-bottom:15px">
+                    <i class="fas fa-plus"></i> <span data-i18n="add_project">Tambah Projek</span>
+                </button>
+                <div id="projectForm" style="display:none; background:var(--bg-secondary); padding:18px; border-radius:10px; margin-bottom:15px">
+                    <input type="hidden" id="projEditId">
+                    <div class="form-group">
+                        <label data-i18n="project_title">Judul Projek</label>
+                        <input type="text" id="projTitle">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="project_desc">Deskripsi</label>
+                        <textarea id="projDesc" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="project_image">Gambar Projek</label>
+                        <div class="upload-area" onclick="document.getElementById('projFile').click()">
+                            <i class="fas fa-image" style="color:var(--primary)"></i>
+                            <p style="color:var(--text-light); font-size:.85rem" data-i18n="click_upload">Klik untuk upload</p>
+                            <img id="projPreview" class="upload-preview" style="display:none; max-height:120px">
+                        </div>
+                        <input type="file" id="projFile" accept="image/*" style="display:none" onchange="previewImage(this, 'projPreview')">
+                    </div>
+                    <button class="btn" onclick="saveProject()"><i class="fas fa-save"></i> <span data-i18n="save">Simpan</span></button>
+                    <button class="btn btn-gray" onclick="hideProjectForm()" data-i18n="cancel">Batal</button>
+                </div>
+                <div id="adminProjectsList"></div>
+            </div>
+
+            <!-- TAB ARTICLES -->
+            <div class="tab-panel" id="tab-articles">
+                <button class="btn" onclick="showArticleForm()" style="margin-bottom:15px">
+                    <i class="fas fa-plus"></i> <span data-i18n="write_article">Tulis Artikel</span>
+                </button>
+                <div id="articleForm" style="display:none; background:var(--bg-secondary); padding:18px; border-radius:10px; margin-bottom:15px">
+                    <input type="hidden" id="artEditId">
+                    <div class="form-group">
+                        <label data-i18n="article_title">Judul Artikel</label>
+                        <input type="text" id="artTitle">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="author_name">Nama Penulis</label>
+                        <input type="text" id="artAuthor" value="Admin">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="content">Konten</label>
+                        <textarea id="artContent" rows="6"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="article_image">Gambar Artikel</label>
+                        <div class="upload-area" onclick="document.getElementById('artFile').click()">
+                            <i class="fas fa-image" style="color:var(--primary)"></i>
+                            <p style="color:var(--text-light); font-size:.85rem" data-i18n="click_upload">Klik untuk upload</p>
+                            <img id="artPreview" class="upload-preview" style="display:none; max-height:120px">
+                        </div>
+                        <input type="file" id="artFile" accept="image/*" style="display:none" onchange="previewImage(this, 'artPreview')">
+                    </div>
+                    <button class="btn" onclick="saveArticle()"><i class="fas fa-save"></i> <span data-i18n="save_article">Simpan Artikel</span></button>
+                    <button class="btn btn-gray" onclick="hideArticleForm()" data-i18n="cancel">Batal</button>
+                </div>
+                <div id="adminArticlesList"></div>
+            </div>
+
+            <!-- TAB MESSAGES -->
+            <div class="tab-panel" id="tab-messages">
+                <div id="adminMessagesList"></div>
+            </div>
+
+            <!-- TAB SETTINGS/THEME -->
+            <div class="tab-panel" id="tab-settings">
+                <div class="form-group">
+                    <label data-i18n="choose_theme">Pilih Tema Warna</label>
+                    <div class="theme-options" id="themeOptions"></div>
+                </div>
+                <button class="btn" onclick="saveTheme()" style="margin-top:15px">
+                    <i class="fas fa-save"></i> <span data-i18n="save_theme">Simpan Tema</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// ============================
+// KONFIGURASI SUPABASE
+// ============================
+const SUPABASE_URL = 'https://jshstzjrcmywcmkkxtwt.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzaHN0empyY215d2Nta2t4dHd0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY4OTYzMTMsImV4cCI6MjEwMjQ3MjMxM30.59bu2mEoeg_ptISeT0IlpkqWE5DQ3TVA2tTgCh60djU';
+
+let db, adminSkills = [], currentSettings = null, selectedTheme = 'orange';
+
+// ============================
+// TRANSLATIONS (ID/EN)
+// ============================
+const i18n = {
+    id: {
+        nav_about: 'Tentang', nav_skills: 'Skill', nav_projects: 'Projek', nav_articles: 'Artikel', nav_contact: 'Kontak',
+        login: 'Login', hello: 'Halo, Saya', skills_title: 'Keahlian', projects_title: 'Projek Terbaru',
+        articles_title: 'Artikel', contact_title: 'Hubungi Saya', contact_subtitle: 'Mari Bekerja Sama!',
+        contact_desc: 'Tertarik berkolaborasi atau punya pertanyaan? Kirim pesan melalui form di samping.',
+        form_name: 'Nama', form_name_ph: 'Nama Anda', form_subject: 'Subjek', form_subject_ph: 'Topik pesan',
+        form_message: 'Pesan', form_message_ph: 'Tulis pesan Anda...', form_send: 'Kirim Pesan',
+        visitors: 'pengunjung', admin_login: 'Admin Login', login_enter: 'Masuk Panel', admin_panel: 'Panel Admin',
+        tab_profile: 'Profil', tab_projects: 'Projek', tab_articles: 'Artikel', tab_messages: 'Pesan', tab_settings: 'Tema',
+        profile_photo: 'Foto Profil', click_upload: 'Klik untuk upload', full_name: 'Nama Lengkap',
+        role: 'Role / Jabatan', bio: 'Bio Singkat', save_profile: 'Simpan Profil', save_skills: 'Simpan Skills',
+        add_project: 'Tambah Projek', project_title: 'Judul Projek', project_desc: 'Deskripsi',
+        project_image: 'Gambar Projek', save: 'Simpan', cancel: 'Batal', write_article: 'Tulis Artikel',
+        article_title: 'Judul Artikel', author_name: 'Nama Penulis', content: 'Konten', article_image: 'Gambar Artikel',
+        save_article: 'Simpan Artikel', choose_theme: 'Pilih Tema Warna', save_theme: 'Simpan Tema',
+        msg_success: '✅ Pesan berhasil dikirim!', msg_error: '❌ Gagal mengirim pesan.',
+        no_messages: 'Belum ada pesan masuk.', mark_read: 'Tandai Dibaca', delete: 'Hapus'
+    },
+    en: {
+        nav_about: 'About', nav_skills: 'Skills', nav_projects: 'Projects', nav_articles: 'Articles', nav_contact: 'Contact',
+        login: 'Login', hello: 'Hello, I am', skills_title: 'Skills', projects_title: 'Latest Projects',
+        articles_title: 'Articles', contact_title: 'Contact Me', contact_subtitle: "Let's Work Together!",
+        contact_desc: 'Interested in collaborating or have questions? Send a message via the form.',
+        form_name: 'Name', form_name_ph: 'Your name', form_subject: 'Subject', form_subject_ph: 'Message topic',
+        form_message: 'Message', form_message_ph: 'Write your message...', form_send: 'Send Message',
+        visitors: 'visitors', admin_login: 'Admin Login', login_enter: 'Enter Panel', admin_panel: 'Admin Panel',
+        tab_profile: 'Profile', tab_projects: 'Projects', tab_articles: 'Articles', tab_messages: 'Messages', tab_settings: 'Theme',
+        profile_photo: 'Profile Photo', click_upload: 'Click to upload', full_name: 'Full Name',
+        role: 'Role / Position', bio: 'Short Bio', save_profile: 'Save Profile', save_skills: 'Save Skills',
+        add_project: 'Add Project', project_title: 'Project Title', project_desc: 'Description',
+        project_image: 'Project Image', save: 'Save', cancel: 'Cancel', write_article: 'Write Article',
+        article_title: 'Article Title', author_name: 'Author Name', content: 'Content', article_image: 'Article Image',
+        save_article: 'Save Article', choose_theme: 'Choose Color Theme', save_theme: 'Save Theme',
+        msg_success: '✅ Message sent successfully!', msg_error: '❌ Failed to send message.',
+        no_messages: 'No messages yet.', mark_read: 'Mark as Read', delete: 'Delete'
+    }
+};
+
+let currentLang = localStorage.getItem('lang') || 'id';
+
+// ============================
+// THEME COLORS
+// ============================
+const themes = {
+    orange: { color: '#FF7F00', name: 'Orange' },
+    blue: { color: '#2563eb', name: 'Blue' },
+    green: { color: '#10b981', name: 'Green' },
+    purple: { color: '#8b5cf6', name: 'Purple' },
+    red: { color: '#ef4444', name: 'Red' },
+    pink: { color: '#ec4899', name: 'Pink' }
+};
+
+// ============================
+// INIT
+// ============================
+document.addEventListener('DOMContentLoaded', async () => {
+    if (!window.supabase) {
+        alert('Library Supabase gagal dimuat. Buka via Live Server!');
+        return;
+    }
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    initDarkMode();
+    applyLanguage(currentLang);
+    setupTabs();
+    renderThemeOptions();
+    
+    await loadAll();
+    await trackVisitor();
+
+    const { data: { session } } = await db.auth.getSession();
+    updateLoginButton(session);
+    if (session) loadUnreadCount();
+});
+
+async function loadAll() {
+    await Promise.all([loadSettings(), loadProjects(), loadArticles()]);
+}
+
+// ============================
+// DARK MODE
+// ============================
+function initDarkMode() {
+    const saved = localStorage.getItem('darkMode');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const isDark = saved === 'true' || (saved === null && prefersDark);
+    
+    if (isDark) document.body.classList.add('dark');
+    updateDarkIcon();
+}
+
+function toggleDark() {
+    document.body.classList.toggle('dark');
+    const isDark = document.body.classList.contains('dark');
+    localStorage.setItem('darkMode', isDark);
+    updateDarkIcon();
+}
+
+function updateDarkIcon() {
+    const isDark = document.body.classList.contains('dark');
+    document.querySelector('#darkToggle i').className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+}
+
+// ============================
+// LANGUAGE
+// ============================
+function changeLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('lang', lang);
+    applyLanguage(lang);
+}
+
+function applyLanguage(lang) {
+    document.getElementById('langSelect').value = lang;
+    const dict = i18n[lang] || i18n.id;
+    
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key]) el.textContent = dict[key];
+    });
+    
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) el.placeholder = dict[key];
+    });
+    
+    document.documentElement.lang = lang;
+}
+
+function t(key) {
+    return (i18n[currentLang] || i18n.id)[key] || key;
+}
+
+// ============================
+// THEME
+// ============================
+function renderThemeOptions() {
+    const container = document.getElementById('themeOptions');
+    container.innerHTML = Object.entries(themes).map(([key, val]) => `
+        <div class="theme-dot ${key === selectedTheme ? 'selected' : ''}" 
+             style="background:${val.color}" 
+             data-theme="${key}"
+             title="${val.name}"
+             onclick="selectTheme('${key}')"></div>
+    `).join('');
+}
+
+function selectTheme(key) {
+    selectedTheme = key;
+    document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('selected'));
+    document.querySelector(`[data-theme="${key}"]`).classList.add('selected');
+}
+
+function applyTheme(key) {
+    document.body.className = document.body.className.replace(/theme-\w+/g, '');
+    if (key && key !== 'orange') document.body.classList.add('theme-' + key);
+    selectedTheme = key || 'orange';
+}
+
+async function saveTheme() {
+    try {
+        const { error } = await db.from('portfolio_settings')
+            .update({ theme_color: selectedTheme })
+            .eq('id', 1);
+        if (error) throw error;
+        applyTheme(selectedTheme);
+        alert('✅ Tema berhasil disimpan!');
+    } catch (err) {
+        alert('❌ Gagal: ' + err.message);
+    }
+}
+
+// ============================
+// VISITOR COUNTER
+// ============================
+async function trackVisitor() {
+    try {
+        let visitorId = localStorage.getItem('visitor_id');
+        if (!visitorId) {
+            visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('visitor_id', visitorId);
+        }
+
+        const today = new Date().toDateString();
+        const lastVisit = localStorage.getItem('last_visit');
+        
+        if (lastVisit !== today) {
+            await db.from('visitors').insert({ visitor_id: visitorId });
+            localStorage.setItem('last_visit', today);
+        }
+
+        const { count } = await db.from('visitors').select('*', { count: 'exact', head: true });
+        document.getElementById('visitorCount').textContent = (count || 0).toLocaleString('id-ID');
+    } catch (err) {
+        console.error('Visitor error:', err);
+    }
+}
+
+// ============================
+// LOAD DATA
+// ============================
+async function loadSettings() {
+    const { data, error } = await db.from('portfolio_settings').select('*').eq('id', 1).single();
+    if (error) return console.error('Settings error:', error);
+    currentSettings = data;
+
+    applyTheme(data.theme_color || 'orange');
+    renderThemeOptions();
+
+    document.getElementById('displayName').textContent = data.full_name;
+    document.getElementById('displayRole').textContent = data.role;
+    document.getElementById('displayBio').textContent = data.bio;
+    
+    const img = document.getElementById('displayImage');
+    img.src = data.profile_image_url || getAvatarUrl(data.full_name);
+    img.onerror = function() { this.onerror = null; this.src = getAvatarUrl(data.full_name); };
+
+    const sc = document.getElementById('skillsContainer');
+    sc.innerHTML = (data.skills || []).map(s => `<div class="skill-tag">${esc(s)}</div>`).join('') || '<p style="color:#999">-</p>';
+
+    const soc = document.getElementById('socialIcons');
+    soc.innerHTML = '';
+    if (data.github) soc.innerHTML += `<a href="${esc(data.github)}" target="_blank"><i class="fab fa-github"></i></a>`;
+    if (data.linkedin) soc.innerHTML += `<a href="${esc(data.linkedin)}" target="_blank"><i class="fab fa-linkedin-in"></i></a>`;
+    if (data.instagram) soc.innerHTML += `<a href="${esc(data.instagram)}" target="_blank"><i class="fab fa-instagram"></i></a>`;
+    if (data.email) soc.innerHTML += `<a href="mailto:${esc(data.email)}"><i class="fas fa-envelope"></i></a>`;
+
+    const info = document.getElementById('contactInfoList');
+    info.innerHTML = '';
+    if (data.email) info.innerHTML += `<div class="contact-item"><i class="fas fa-envelope"></i> ${esc(data.email)}</div>`;
+    if (data.github) info.innerHTML += `<div class="contact-item"><i class="fab fa-github"></i> GitHub</div>`;
+    if (data.linkedin) info.innerHTML += `<div class="contact-item"><i class="fab fa-linkedin"></i> LinkedIn</div>`;
+    if (data.instagram) info.innerHTML += `<div class="contact-item"><i class="fab fa-instagram"></i> Instagram</div>`;
+}
+
+function getAvatarUrl(name) {
+    const cleanName = (name || 'User').trim().replace(/\s+/g, '+');
+    return `https://ui-avatars.com/api/?name=${cleanName}&size=640&background=FF7F00&color=fff&bold=true&format=png`;
+}
+
+async function loadProjects() {
+    const { data, error } = await db.from('projects').select('*').order('created_at', { ascending: false });
+    if (error) return console.error('Projects error:', error);
+
+    const c = document.getElementById('projectsContainer');
+    c.innerHTML = data.length ? data.map(p => `
+        <div class="card">
+            <img src="${p.image_url || `https://picsum.photos/seed/proj${p.id}/600/380`}" 
+                 alt="${esc(p.title)}" loading="lazy"
+                 onerror="this.src='https://picsum.photos/seed/proj${p.id}/600/380'">
+            <div class="card-body">
+                <h3>${esc(p.title)}</h3>
+                <p>${esc(p.description)}</p>
+            </div>
+        </div>
+    `).join('') : `<div class="empty-state">-</div>`;
+}
+
+async function loadArticles() {
+    const { data, error } = await db.from('articles').select('*').order('created_at', { ascending: false });
+    if (error) return console.error('Articles error:', error);
+
+    const c = document.getElementById('articlesContainer');
+    c.innerHTML = data.length ? data.map(a => {
+        const date = new Date(a.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
+        const excerpt = a.content.substring(0, 80) + (a.content.length > 80 ? '...' : '');
+        return `
+            <div class="article-card">
+                <img src="${a.image_url || `https://picsum.photos/seed/art${a.id}/600/320`}" 
+                     alt="${esc(a.title)}" loading="lazy"
+                     onerror="this.src='https://picsum.photos/seed/art${a.id}/600/320'">
+                <div class="card-body">
+                    <div class="article-meta">
+                        <span class="author"><i class="fas fa-user"></i> ${esc(a.author || 'Admin')}</span>
+                        <span><i class="far fa-calendar"></i> ${date}</span>
+                    </div>
+                    <h3>${esc(a.title)}</h3>
+                    <p class="article-excerpt">${esc(excerpt)}</p>
+                </div>
+            </div>
+        `;
+    }).join('') : `<div class="empty-state">-</div>`;
+}
+
+// ============================
+// CONTACT FORM
+// ============================
+async function sendContact() {
+    const name = document.getElementById('contactName').value.trim();
+    const email = document.getElementById('contactEmail').value.trim();
+    const subject = document.getElementById('contactSubject').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    const alertBox = document.getElementById('contactAlert');
+
+    if (!name || !email || !message) {
+        alertBox.className = 'alert error';
+        alertBox.textContent = '❌ Nama, email, dan pesan wajib diisi!';
+        return;
+    }
+
+    try {
+        const { error } = await db.from('messages').insert({ name, email, subject, message });
+        if (error) throw error;
+
+        alertBox.className = 'alert success';
+        alertBox.textContent = t('msg_success');
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactSubject').value = '';
+        document.getElementById('contactMessage').value = '';
+        
+        setTimeout(() => { alertBox.className = 'alert'; }, 4000);
+    } catch (err) {
+        alertBox.className = 'alert error';
+        alertBox.textContent = t('msg_error');
+    }
+}
+
+// ============================
+// ADMIN MESSAGES
+// ============================
+async function loadAdminMessages() {
+    const { data } = await db.from('messages').select('*').order('created_at', { ascending: false });
+    const list = document.getElementById('adminMessagesList');
+    
+    list.innerHTML = (data || []).map(m => `
+        <div class="list-item" style="${m.is_read ? 'opacity:.6' : ''}">
+            <div class="list-item-info">
+                <strong>${m.is_read ? '' : '🔴 '}${esc(m.name)} ${m.subject ? '• ' + esc(m.subject) : ''}</strong>
+                <small>${esc(m.email)} • ${new Date(m.created_at).toLocaleString('id-ID')}</small>
+                <small style="margin-top:5px; white-space:normal">${esc(m.message)}</small>
+            </div>
+            <div class="list-actions" style="flex-direction:column">
+                ${!m.is_read ? `<button class="btn btn-sm btn-gray" onclick="markRead(${m.id})"><i class="fas fa-check"></i></button>` : ''}
+                <button class="btn btn-sm btn-red" onclick="deleteMessage(${m.id})"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('') || `<div class="empty-state">${t('no_messages')}</div>`;
+}
+
+async function markRead(id) {
+    await db.from('messages').update({ is_read: true }).eq('id', id);
+    await Promise.all([loadAdminMessages(), loadUnreadCount()]);
+}
+
+async function deleteMessage(id) {
+    if (!confirm('Hapus pesan ini?')) return;
+    await db.from('messages').delete().eq('id', id);
+    await Promise.all([loadAdminMessages(), loadUnreadCount()]);
+}
+
+async function loadUnreadCount() {
+    const { count } = await db.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+    const badge = document.getElementById('msgBadge');
+    if (count > 0) {
+        badge.style.display = 'inline';
+        badge.textContent = count;
+    } else {
+        badge.style.display = 'none';
+    }
+}
+
+// ============================
+// AUTH
+// ============================
+async function handleLogin() {
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPass').value;
+    const alertBox = document.getElementById('loginAlert');
+
+    const { error } = await db.auth.signInWithPassword({ email, password: pass });
+    if (error) {
+        alertBox.className = 'alert error';
+        alertBox.textContent = '❌ ' + error.message;
+        return;
+    }
+    closeModal('loginModal');
+    openAdminPanel();
+}
+
+async function handleLogout() {
+    if (!confirm('Yakin ingin logout?')) return;
+    await db.auth.signOut();
+    closeModal('adminModal');
+    location.reload();
+}
+
+function updateLoginButton(session) {
+    const btn = document.getElementById('loginBtn');
+    if (session) {
+        btn.innerHTML = '<i class="fas fa-cog"></i> <span data-i18n="admin_panel">Panel</span>';
+        btn.onclick = () => openAdminPanel();
+    } else {
+        btn.innerHTML = '<i class="fas fa-lock"></i> <span data-i18n="login">Login</span>';
+        btn.onclick = () => openModal('loginModal');
+    }
+    applyLanguage(currentLang);
+}
+
+// ============================
+// MODAL & TABS
+// ============================
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+async function openAdminPanel() {
+    openModal('adminModal');
+    fillProfileForm();
+    renderAdminSkills();
+    await Promise.all([loadAdminProjects(), loadAdminArticles(), loadAdminMessages(), loadUnreadCount()]);
+}
+
+function setupTabs() {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+        });
+    });
+
+    document.querySelectorAll('.modal').forEach(m => {
+        m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+    });
+}
+
+// ============================
+// UPLOAD
+// ============================
+async function uploadToStorage(fileInput, folder) {
+    const file = fileInput.files[0];
+    if (!file) return null;
+    const ext = file.name.split('.').pop();
+    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substr(2, 6)}.${ext}`;
+    const { error } = await db.storage.from('images').upload(fileName, file, { upsert: true });
+    if (error) throw error;
+    const { data } = db.storage.from('images').getPublicUrl(fileName);
+    return data.publicUrl;
+}
+
+function previewImage(input, previewId) {
+    const preview = document.getElementById(previewId);
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => { preview.src = e.target.result; preview.style.display = 'block'; };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+
+// ============================
+// PROFIL
+// ============================
+function fillProfileForm() {
+    if (!currentSettings) return;
+    const s = currentSettings;
+    document.getElementById('editName').value = s.full_name || '';
+    document.getElementById('editRole').value = s.role || '';
+    document.getElementById('editBio').value = s.bio || '';
+    document.getElementById('editEmail').value = s.email || '';
+    document.getElementById('editGithub').value = s.github || '';
+    document.getElementById('editLinkedin').value = s.linkedin || '';
+    document.getElementById('editInstagram').value = s.instagram || '';
+    if (s.profile_image_url) {
+        const p = document.getElementById('profilePreview');
+        p.src = s.profile_image_url;
+        p.style.display = 'block';
+    }
+}
+
+async function saveProfile() {
+    try {
+        let imageUrl = currentSettings?.profile_image_url;
+        const fileInput = document.getElementById('profileFile');
+        if (fileInput.files.length > 0) imageUrl = await uploadToStorage(fileInput, 'profile');
+
+        const updates = {
+            full_name: document.getElementById('editName').value.trim(),
+            role: document.getElementById('editRole').value.trim(),
+            bio: document.getElementById('editBio').value.trim(),
+            email: document.getElementById('editEmail').value.trim(),
+            github: document.getElementById('editGithub').value.trim(),
+            linkedin: document.getElementById('editLinkedin').value.trim(),
+            instagram: document.getElementById('editInstagram').value.trim(),
+            profile_image_url: imageUrl
+        };
+
+        const { error } = await db.from('portfolio_settings').update(updates).eq('id', 1);
+        if (error) throw error;
+        alert('✅ Profil berhasil disimpan!');
+        await loadSettings();
+    } catch (err) {
+        alert('❌ Gagal: ' + err.message);
+    }
+}
+
+// ============================
+// SKILLS
+// ============================
+function renderAdminSkills() {
+    adminSkills = [...(currentSettings?.skills || [])];
+    renderAdminSkillsFromArr();
+}
+
+function addSkill() {
+    const input = document.getElementById('newSkill');
+    const val = input.value.trim();
+    if (!val) return;
+    adminSkills.push(val);
+    input.value = '';
+    renderAdminSkillsFromArr();
+}
+
+function removeSkill(i) {
+    adminSkills.splice(i, 1);
+    renderAdminSkillsFromArr();
+}
+
+function renderAdminSkillsFromArr() {
+    const list = document.getElementById('adminSkillsList');
+    list.innerHTML = adminSkills.length ? adminSkills.map((s, i) => `
+        <div class="list-item">
+            <div class="list-item-info"><strong>${esc(s)}</strong></div>
+            <button class="btn btn-sm btn-red" onclick="removeSkill(${i})"><i class="fas fa-trash"></i></button>
+        </div>
+    `).join('') : '<div class="empty-state">-</div>';
+}
+
+async function saveSkills() {
+    try {
+        const { error } = await db.from('portfolio_settings').update({ skills: adminSkills }).eq('id', 1);
+        if (error) throw error;
+        alert('✅ Skills berhasil disimpan!');
+        await loadSettings();
+    } catch (err) {
+        alert('❌ Gagal: ' + err.message);
+    }
+}
+
+// ============================
+// PROJECTS
+// ============================
+async function loadAdminProjects() {
+    const { data } = await db.from('projects').select('*').order('created_at', { ascending: false });
+    const list = document.getElementById('adminProjectsList');
+    list.innerHTML = (data || []).map(p => `
+        <div class="list-item">
+            <div class="list-item-info">
+                <strong>${esc(p.title)}</strong>
+                <small>${esc(p.description)}</small>
+            </div>
+            <div class="list-actions">
+                <button class="btn btn-sm btn-gray" onclick='editProject(${JSON.stringify(p).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-red" onclick="deleteProject(${p.id})"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('') || '<div class="empty-state">-</div>';
+}
+
+function showProjectForm() { document.getElementById('projectForm').style.display = 'block'; }
+function hideProjectForm() {
+    document.getElementById('projectForm').style.display = 'none';
+    document.getElementById('projEditId').value = '';
+    document.getElementById('projTitle').value = '';
+    document.getElementById('projDesc').value = '';
+    document.getElementById('projFile').value = '';
+    document.getElementById('projPreview').style.display = 'none';
+    delete document.getElementById('projPreview').dataset.existing;
+}
+
+function editProject(p) {
+    showProjectForm();
+    document.getElementById('projEditId').value = p.id;
+    document.getElementById('projTitle').value = p.title;
+    document.getElementById('projDesc').value = p.description;
+    if (p.image_url) {
+        const prev = document.getElementById('projPreview');
+        prev.src = p.image_url;
+        prev.style.display = 'block';
+        prev.dataset.existing = p.image_url;
+    }
+}
+
+async function saveProject() {
+    try {
+        const id = document.getElementById('projEditId').value;
+        const title = document.getElementById('projTitle').value.trim();
+        const desc = document.getElementById('projDesc').value.trim();
+        if (!title) return alert('Judul wajib diisi!');
+
+        let imageUrl = document.getElementById('projPreview').dataset.existing || '';
+        const fileInput = document.getElementById('projFile');
+        if (fileInput.files.length > 0) imageUrl = await uploadToStorage(fileInput, 'projects');
+
+        const payload = { title, description: desc, image_url: imageUrl };
+
+        if (id) {
+            const { error } = await db.from('projects').update(payload).eq('id', id);
+            if (error) throw error;
+        } else {
+            const { error } = await db.from('projects').insert(payload);
+            if (error) throw error;
+        }
+
+        alert('✅ Projek berhasil disimpan!');
+        hideProjectForm();
+        await Promise.all([loadProjects(), loadAdminProjects()]);
+    } catch (err) {
+        alert('❌ Gagal: ' + err.message);
+    }
+}
+
+async function deleteProject(id) {
+    if (!confirm('Hapus projek ini?')) return;
+    await db.from('projects').delete().eq('id', id);
+    await Promise.all([loadProjects(), loadAdminProjects()]);
+}
+
+// ============================
+// ARTICLES
+// ============================
+async function loadAdminArticles() {
+    const { data } = await db.from('articles').select('*').order('created_at', { ascending: false });
+    const list = document.getElementById('adminArticlesList');
+    list.innerHTML = (data || []).map(a => `
+        <div class="list-item">
+            <div class="list-item-info">
+                <strong>${esc(a.title)}</strong>
+                <small>${esc(a.author || 'Admin')} • ${new Date(a.created_at).toLocaleDateString('id-ID')}</small>
+            </div>
+            <div class="list-actions">
+                <button class="btn btn-sm btn-gray" onclick="editArticle(${a.id})"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-sm btn-red" onclick="deleteArticle(${a.id})"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+    `).join('') || '<div class="empty-state">-</div>';
+}
+
+function showArticleForm() { document.getElementById('articleForm').style.display = 'block'; }
+function hideArticleForm() {
+    document.getElementById('articleForm').style.display = 'none';
+    document.getElementById('artEditId').value = '';
+    document.getElementById('artTitle').value = '';
+    document.getElementById('artAuthor').value = 'Admin';
+    document.getElementById('artContent').value = '';
+    document.getElementById('artFile').value = '';
+    document.getElementById('artPreview').style.display = 'none';
+    delete document.getElementById('artPreview').dataset.existing;
+}
+
+async function editArticle(id) {
+    const { data } = await db.from('articles').select('*').eq('id', id).single();
+    if (!data) return;
+    showArticleForm();
+    document.getElementById('artEditId').value = data.id;
+    document.getElementById('artTitle').value = data.title;
+    document.getElementById('artAuthor').value = data.author || 'Admin';
+    document.getElementById('artContent').value = data.content;
+    if (data.image_url) {
+        const prev = document.getElementById('artPreview');
+        prev.src = data.image_url;
+        prev.style.display = 'block';
+        prev.dataset.existing = data.image_url;
+    }
+}
+
+async function saveArticle() {
+    try {
+        const id = document.getElementById('artEditId').value;
+        const title = document.getElementById('artTitle').value.trim();
+        const author = document.getElementById('artAuthor').value.trim() || 'Admin';
+        const content = document.getElementById('artContent').value.trim();
+        if (!title || !content) return alert('Judul dan konten wajib diisi!');
+
+        let imageUrl = document.getElementById('artPreview').dataset.existing || '';
+        const fileInput = document.getElementById('artFile');
+        if (fileInput.files.length > 0) imageUrl = await uploadToStorage(fileInput, 'articles');
+
+        const payload = { title, author, content, image_url: imageUrl };
+
+        if (id) {
+            payload.updated_at = new Date().toISOString();
+            const { error } = await db.from('articles').update(payload).eq('id', id);
+            if (error) throw error;
+        } else {
+            const { error } = await db.from('articles').insert(payload);
+            if (error) throw error;
+        }
+
+        alert('✅ Artikel berhasil disimpan!');
+        hideArticleForm();
+        await Promise.all([loadArticles(), loadAdminArticles()]);
+    } catch (err) {
+        alert('❌ Gagal: ' + err.message);
+    }
+}
+
+async function deleteArticle(id) {
+    if (!confirm('Hapus artikel ini?')) return;
+    await db.from('articles').delete().eq('id', id);
+    await Promise.all([loadArticles(), loadAdminArticles()]);
+}
+
+// ============================
+// HELPER
+// ============================
+function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+</script>
+</body>
+</html>
