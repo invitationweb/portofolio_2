@@ -14,7 +14,6 @@
             --primary: #FF7F00;
             --primary-dark: #e66a00;
             --primary-light: #fff4e6;
-            
             --bg: #ffffff;
             --bg-secondary: #f9f9f9;
             --card-bg: #ffffff;
@@ -77,8 +76,9 @@
         body.dark .btn-gray { background:#3a3a3a; color:#e0e0e0; }
         .btn-red { background:#e74c3c; }
         .btn-red:hover { background:#c0392b; }
+        .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+        .btn-outline:hover { background: var(--primary); color: #fff; }
 
-        /* Language selector */
         .lang-select { background: var(--input-bg); color: var(--text); border: 1px solid var(--input-border); padding: 6px 10px; border-radius: 20px; font-size: .85rem; cursor: pointer; }
 
         /* ===== HERO ===== */
@@ -89,13 +89,7 @@
         .hero-text h2 { color: var(--primary); font-size:1.3rem; margin-bottom:15px; font-weight:600; }
         .hero-text p { color: var(--text-light); max-width:500px; margin-bottom:25px; }
         .hero-img { flex:1; display:flex; justify-content:center; }
-        
-        .profile-pic { 
-            width: 320px; height: 320px; object-fit: cover; object-position: center;
-            border-radius: 50%; border: 6px solid var(--primary); box-shadow: var(--shadow);
-            background: var(--bg-secondary);
-        }
-        
+        .profile-pic { width: 320px; height: 320px; object-fit: cover; object-position: center; border-radius: 50%; border: 6px solid var(--primary); box-shadow: var(--shadow); background: var(--bg-secondary); }
         .social-icons { display:flex; gap:15px; }
         .social-icons a { width:42px; height:42px; background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; border-radius:50%; color:var(--primary); font-size:1.1rem; transition:.3s; box-shadow:var(--shadow); }
         .social-icons a:hover { background:var(--primary); color:#fff; }
@@ -107,19 +101,19 @@
 
         /* ===== CARDS ===== */
         .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(300px,1fr)); gap:25px; }
-        .card, .article-card { background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); transition:.3s; }
+        .card, .article-card { background:var(--card-bg); border-radius:12px; overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); transition:.3s; display: flex; flex-direction: column; }
         .card:hover, .article-card:hover { transform:translateY(-6px); }
         .card img { width:100%; height:190px; object-fit:cover; background:var(--bg-secondary); }
-        .card-body { padding:20px; }
+        .card-body { padding:20px; flex: 1; display: flex; flex-direction: column; }
         .card-body h3 { color:var(--primary); margin-bottom:8px; }
-        .card-body p { color:var(--text-light); font-size:.95rem; }
+        .card-body p { color:var(--text-light); font-size:.95rem; flex: 1; }
 
         .article-card img { width:100%; height:160px; object-fit:cover; background:var(--bg-secondary); }
         .article-card .card-body { padding:15px; }
         .article-card h3 { font-size:1rem; margin-bottom:8px; color:var(--text); }
         .article-meta { display:flex; justify-content:space-between; font-size:.75rem; color:#999; margin-bottom:8px; }
         .article-meta .author { color:var(--primary); font-weight:600; }
-        .article-excerpt { font-size:.85rem; color:var(--text-light); display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+        .article-excerpt { font-size:.85rem; color:var(--text-light); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; margin-bottom: 15px; flex: 1; }
 
         /* ===== CONTACT ===== */
         .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
@@ -127,15 +121,10 @@
         .contact-info p { color: var(--text-light); margin-bottom: 20px; }
         .contact-item { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; color: var(--text-light); }
         .contact-item i { color: var(--primary); font-size: 1.2rem; width: 24px; }
-        
         .contact-form { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: var(--shadow); }
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: .9rem; }
-        .form-group input, .form-group textarea, .form-group select { 
-            width: 100%; padding: 10px 12px; border: 1px solid var(--input-border); 
-            border-radius: 8px; font-family: inherit; font-size: .95rem; 
-            background: var(--input-bg); color: var(--text); transition: border .3s;
-        }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px 12px; border: 1px solid var(--input-border); border-radius: 8px; font-family: inherit; font-size: .95rem; background: var(--input-bg); color: var(--text); transition: border .3s; }
         .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--primary); }
 
         /* ===== FOOTER ===== */
@@ -144,27 +133,24 @@
         .visitor-badge i { color: var(--primary); }
 
         /* ===== MODAL ===== */
-        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1000; align-items:center; justify-content:center; padding:20px; }
+        .modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:1000; align-items:center; justify-content:center; padding:20px; backdrop-filter: blur(4px); }
         .modal.active { display:flex; }
         .modal-box { background:var(--card-bg); border-radius:16px; width:100%; max-width:700px; max-height:90vh; overflow-y:auto; position:relative; animation:pop .25s; }
         @keyframes pop { from{transform:scale(.95);opacity:0} to{transform:scale(1);opacity:1} }
         .modal-head { background:var(--primary); color:#fff; padding:18px 25px; border-radius:16px 16px 0 0; display:flex; justify-content:space-between; align-items:center; }
         .modal-body { padding:25px; }
-        .close-x { background:none; border:none; color:#fff; font-size:1.4rem; line-height:1; }
+        .close-x { background:none; border:none; color:#fff; font-size:1.6rem; line-height:1; cursor: pointer; }
 
         /* ===== ADMIN TABS ===== */
         .tabs { display:flex; gap:5px; border-bottom:2px solid var(--border); margin-bottom:20px; flex-wrap:wrap; }
-        .tab-btn { background:none; border:none; padding:10px 16px; font-weight:600; color:var(--text-light); border-bottom:3px solid transparent; margin-bottom:-2px; font-size:.9rem; }
+        .tab-btn { background:none; border:none; padding:10px 16px; font-weight:600; color:var(--text-light); border-bottom:3px solid transparent; margin-bottom:-2px; font-size:.9rem; cursor: pointer; }
         .tab-btn.active { color:var(--primary); border-bottom-color:var(--primary); }
         .tab-panel { display:none; }
         .tab-panel.active { display:block; }
-
         .form-row { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
-
         .upload-area { border:2px dashed var(--input-border); border-radius:12px; padding:20px; text-align:center; cursor:pointer; transition:.3s; }
         .upload-area:hover { border-color:var(--primary); background:var(--primary-light); }
         .upload-preview { max-height:200px; max-width:100%; border-radius:8px; margin-top:10px; }
-
         .list-item { display:flex; justify-content:space-between; align-items:center; padding:12px 15px; background:var(--bg-secondary); border-radius:10px; margin-bottom:10px; gap:10px; }
         .list-item-info { flex:1; min-width:0; }
         .list-item-info strong { display:block; }
@@ -172,13 +158,11 @@
         .list-actions { display:flex; gap:6px; flex-shrink:0; }
         .add-row { display:flex; gap:10px; margin-bottom:15px; }
         .add-row input { flex:1; padding:10px 12px; border:1px solid var(--input-border); border-radius:8px; background:var(--input-bg); color:var(--text); }
-
         .alert { padding:12px 15px; border-radius:8px; margin-bottom:15px; font-size:.9rem; display:none; }
         .alert.success { background:#d4edda; color:#155724; display:block; }
         .alert.error { background:#f8d7da; color:#721c24; display:block; }
         body.dark .alert.success { background:#1e4620; color:#a3e635; }
         body.dark .alert.error { background:#4a1c1c; color:#fca5a5; }
-
         .empty-state { text-align:center; padding:30px; color:#999; grid-column: 1/-1; }
 
         /* Theme picker */
@@ -187,8 +171,11 @@
         .theme-dot:hover { transform: scale(1.1); }
         .theme-dot.selected { border-color: var(--text); transform: scale(1.1); }
         .theme-dot.selected::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: bold; }
-
         .unread-badge { background: #e74c3c; color: #fff; border-radius: 10px; padding: 1px 8px; font-size: .7rem; margin-left: 5px; }
+
+        /* Article Detail Modal Specific */
+        .article-detail-content { line-height: 1.8; font-size: 1.05rem; color: var(--text); white-space: pre-wrap; }
+        .article-detail-img { width: 100%; max-height: 400px; object-fit: cover; border-radius: 8px; margin-bottom: 20px; }
 
         @media (max-width:768px) {
             .hero { flex-direction:column-reverse; text-align:center; }
@@ -334,6 +321,24 @@
     </div>
 </div>
 
+<!-- MODAL DETAIL ARTIKEL (BARU) -->
+<div class="modal" id="articleDetailModal">
+    <div class="modal-box" style="max-width: 800px;">
+        <div class="modal-head">
+            <h3 id="modalArticleTitle" style="font-size: 1.2rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90%;">Judul Artikel</h3>
+            <button class="close-x" onclick="closeModal('articleDetailModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <img id="modalArticleImage" src="" class="article-detail-img" style="display:none;">
+            <div class="article-meta" style="margin-bottom:20px; font-size:0.9rem; padding-bottom: 15px; border-bottom: 1px solid var(--border);">
+                <span class="author" id="modalArticleAuthor"><i class="fas fa-user"></i> Admin</span>
+                <span id="modalArticleDate" style="margin-left: 15px;"><i class="far fa-calendar"></i> 1 Jan 2024</span>
+            </div>
+            <div id="modalArticleContent" class="article-detail-content"></div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL ADMIN PANEL -->
 <div class="modal" id="adminModal">
     <div class="modal-box">
@@ -424,6 +429,10 @@
                     <div class="form-group">
                         <label data-i18n="project_desc">Deskripsi</label>
                         <textarea id="projDesc" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Link Demo / URL Projek</label>
+                        <input type="url" id="projLink" placeholder="https://contoh.com">
                     </div>
                     <div class="form-group">
                         <label data-i18n="project_image">Gambar Projek</label>
@@ -592,7 +601,6 @@ function initDarkMode() {
     const saved = localStorage.getItem('darkMode');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const isDark = saved === 'true' || (saved === null && prefersDark);
-    
     if (isDark) document.body.classList.add('dark');
     updateDarkIcon();
 }
@@ -621,17 +629,14 @@ function changeLanguage(lang) {
 function applyLanguage(lang) {
     document.getElementById('langSelect').value = lang;
     const dict = i18n[lang] || i18n.id;
-    
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) el.textContent = dict[key];
     });
-    
     document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
         const key = el.getAttribute('data-i18n-placeholder');
         if (dict[key]) el.placeholder = dict[key];
     });
-    
     document.documentElement.lang = lang;
 }
 
@@ -667,9 +672,7 @@ function applyTheme(key) {
 
 async function saveTheme() {
     try {
-        const { error } = await db.from('portfolio_settings')
-            .update({ theme_color: selectedTheme })
-            .eq('id', 1);
+        const { error } = await db.from('portfolio_settings').update({ theme_color: selectedTheme }).eq('id', 1);
         if (error) throw error;
         applyTheme(selectedTheme);
         alert('✅ Tema berhasil disimpan!');
@@ -688,15 +691,12 @@ async function trackVisitor() {
             visitorId = 'v_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
             localStorage.setItem('visitor_id', visitorId);
         }
-
         const today = new Date().toDateString();
         const lastVisit = localStorage.getItem('last_visit');
-        
         if (lastVisit !== today) {
             await db.from('visitors').insert({ visitor_id: visitorId });
             localStorage.setItem('last_visit', today);
         }
-
         const { count } = await db.from('visitors').select('*', { count: 'exact', head: true });
         document.getElementById('visitorCount').textContent = (count || 0).toLocaleString('id-ID');
     } catch (err) {
@@ -751,7 +751,9 @@ async function loadProjects() {
     if (error) return console.error('Projects error:', error);
 
     const c = document.getElementById('projectsContainer');
-    c.innerHTML = data.length ? data.map(p => `
+    c.innerHTML = data.length ? data.map(p => {
+        const linkBtn = p.project_link ? `<a href="${esc(p.project_link)}" target="_blank" class="btn btn-sm btn-outline" style="margin-top:15px; width:100%; justify-content:center;"><i class="fas fa-external-link-alt"></i> Lihat Demo</a>` : '';
+        return `
         <div class="card">
             <img src="${p.image_url || `https://picsum.photos/seed/proj${p.id}/600/380`}" 
                  alt="${esc(p.title)}" loading="lazy"
@@ -759,9 +761,10 @@ async function loadProjects() {
             <div class="card-body">
                 <h3>${esc(p.title)}</h3>
                 <p>${esc(p.description)}</p>
+                ${linkBtn}
             </div>
         </div>
-    `).join('') : `<div class="empty-state">-</div>`;
+    `}).join('') : `<div class="empty-state">-</div>`;
 }
 
 async function loadArticles() {
@@ -771,11 +774,8 @@ async function loadArticles() {
     const c = document.getElementById('articlesContainer');
     c.innerHTML = data.length ? data.map(a => {
         const date = new Date(a.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
-        
-        // LOGIKA BARU: Cek apakah konten cukup panjang untuk dipotong
         const contentText = a.content || '';
-        const isLong = contentText.length > 120; // Batas 120 karakter
-        const excerpt = isLong ? contentText.substring(0, 120) + '...' : contentText;
+        const excerpt = contentText.length > 150 ? contentText.substring(0, 150) + '...' : contentText;
 
         return `
             <div class="article-card">
@@ -788,18 +788,10 @@ async function loadArticles() {
                         <span><i class="far fa-calendar"></i> ${date}</span>
                     </div>
                     <h3>${esc(a.title)}</h3>
-                    
-                    <!-- Teks Pendek (Awalnya Muncul) -->
-                    <p class="article-excerpt" id="excerpt-${a.id}" style="${isLong ? '' : 'display:none; -webkit-line-clamp: unset;'}">${esc(excerpt)}</p>
-                    
-                    <!-- Teks Lengkap (Awalnya Tersembunyi) -->
-                    <div class="article-full-content" id="full-${a.id}" style="display: none; margin-top: 10px; font-size: 0.9rem; color: var(--text-light); white-space: pre-wrap; line-height: 1.5;">${esc(contentText)}</div>
-                    
-                    <!-- Tombol Selengkapnya (Hanya muncul jika teks panjang) -->
-                    ${isLong ? `
-                    <button class="btn btn-sm btn-gray" style="margin-top: 12px; width: 100%;" onclick="toggleArticle(${a.id}, this)">
-                        <span>Baca Selengkapnya</span> <i class="fas fa-chevron-down"></i>
-                    </button>` : ''}
+                    <p class="article-excerpt">${esc(excerpt)}</p>
+                    <button class="btn btn-sm" style="margin-top: auto; width: 100%; justify-content: center;" onclick="openArticleDetail(${a.id})">
+                        <span>Baca Selengkapnya</span> <i class="fas fa-arrow-right"></i>
+                    </button>
                 </div>
             </div>
         `;
@@ -807,31 +799,28 @@ async function loadArticles() {
 }
 
 // ============================
-// TOGGLE ARTIKEL (BACA SELENGKAPNYA)
+// ARTICLE DETAIL MODAL (BARU)
 // ============================
-function toggleArticle(id, btn) {
-    const fullContent = document.getElementById(`full-${id}`);
-    const excerpt = document.getElementById(`excerpt-${id}`);
-    const btnText = btn.querySelector('span');
-    const btnIcon = btn.querySelector('i');
+async function openArticleDetail(id) {
+    const { data, error } = await db.from('articles').select('*').eq('id', id).single();
+    if (error || !data) return alert('Gagal memuat detail artikel');
 
-    if (fullContent.style.display === 'none') {
-        // Tampilkan konten lengkap, sembunyikan excerpt
-        fullContent.style.display = 'block';
-        excerpt.style.display = 'none';
-        
-        // Ubah tampilan tombol menjadi "Tutup"
-        btnText.textContent = 'Tutup';
-        btnIcon.className = 'fas fa-chevron-up';
+    document.getElementById('modalArticleTitle').textContent = data.title;
+    document.getElementById('modalArticleAuthor').innerHTML = `<i class="fas fa-user"></i> ${esc(data.author || 'Admin')}`;
+    document.getElementById('modalArticleDate').innerHTML = `<i class="far fa-calendar"></i> ${new Date(data.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' })}`;
+    
+    // Format konten agar baris baru (enter) terbaca
+    document.getElementById('modalArticleContent').innerHTML = esc(data.content).replace(/\n/g, '<br>');
+
+    const img = document.getElementById('modalArticleImage');
+    if (data.image_url) {
+        img.src = data.image_url;
+        img.style.display = 'block';
     } else {
-        // Sembunyikan konten lengkap, tampilkan excerpt lagi
-        fullContent.style.display = 'none';
-        excerpt.style.display = 'block';
-        
-        // Kembalikan tampilan tombol
-        btnText.textContent = 'Baca Selengkapnya';
-        btnIcon.className = 'fas fa-chevron-down';
+        img.style.display = 'none';
     }
+
+    openModal('articleDetailModal');
 }
 
 // ============================
@@ -860,7 +849,6 @@ async function sendContact() {
         document.getElementById('contactEmail').value = '';
         document.getElementById('contactSubject').value = '';
         document.getElementById('contactMessage').value = '';
-        
         setTimeout(() => { alertBox.className = 'alert'; }, 4000);
     } catch (err) {
         alertBox.className = 'alert error';
@@ -874,7 +862,6 @@ async function sendContact() {
 async function loadAdminMessages() {
     const { data } = await db.from('messages').select('*').order('created_at', { ascending: false });
     const list = document.getElementById('adminMessagesList');
-    
     list.innerHTML = (data || []).map(m => `
         <div class="list-item" style="${m.is_read ? 'opacity:.6' : ''}">
             <div class="list-item-info">
@@ -952,8 +939,8 @@ function updateLoginButton(session) {
 // ============================
 // MODAL & TABS
 // ============================
-function openModal(id) { document.getElementById(id).classList.add('active'); }
-function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+function openModal(id) { document.getElementById(id).classList.add('active'); document.body.style.overflow = 'hidden'; }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); document.body.style.overflow = ''; }
 
 async function openAdminPanel() {
     openModal('adminModal');
@@ -971,9 +958,8 @@ function setupTabs() {
             document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
         });
     });
-
     document.querySelectorAll('.modal').forEach(m => {
-        m.addEventListener('click', e => { if (e.target === m) m.classList.remove('active'); });
+        m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
     });
 }
 
@@ -1100,6 +1086,7 @@ async function loadAdminProjects() {
             <div class="list-item-info">
                 <strong>${esc(p.title)}</strong>
                 <small>${esc(p.description)}</small>
+                ${p.project_link ? `<small style="color:var(--primary)"><i class="fas fa-link"></i> ${esc(p.project_link)}</small>` : ''}
             </div>
             <div class="list-actions">
                 <button class="btn btn-sm btn-gray" onclick='editProject(${JSON.stringify(p).replace(/'/g, "&#39;")})'><i class="fas fa-edit"></i></button>
@@ -1115,6 +1102,7 @@ function hideProjectForm() {
     document.getElementById('projEditId').value = '';
     document.getElementById('projTitle').value = '';
     document.getElementById('projDesc').value = '';
+    document.getElementById('projLink').value = '';
     document.getElementById('projFile').value = '';
     document.getElementById('projPreview').style.display = 'none';
     delete document.getElementById('projPreview').dataset.existing;
@@ -1125,6 +1113,7 @@ function editProject(p) {
     document.getElementById('projEditId').value = p.id;
     document.getElementById('projTitle').value = p.title;
     document.getElementById('projDesc').value = p.description;
+    document.getElementById('projLink').value = p.project_link || '';
     if (p.image_url) {
         const prev = document.getElementById('projPreview');
         prev.src = p.image_url;
@@ -1138,13 +1127,14 @@ async function saveProject() {
         const id = document.getElementById('projEditId').value;
         const title = document.getElementById('projTitle').value.trim();
         const desc = document.getElementById('projDesc').value.trim();
+        const link = document.getElementById('projLink').value.trim();
         if (!title) return alert('Judul wajib diisi!');
 
         let imageUrl = document.getElementById('projPreview').dataset.existing || '';
         const fileInput = document.getElementById('projFile');
         if (fileInput.files.length > 0) imageUrl = await uploadToStorage(fileInput, 'projects');
 
-        const payload = { title, description: desc, image_url: imageUrl };
+        const payload = { title, description: desc, project_link: link, image_url: imageUrl };
 
         if (id) {
             const { error } = await db.from('projects').update(payload).eq('id', id);
