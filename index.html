@@ -771,7 +771,12 @@ async function loadArticles() {
     const c = document.getElementById('articlesContainer');
     c.innerHTML = data.length ? data.map(a => {
         const date = new Date(a.created_at).toLocaleDateString('id-ID', { day:'numeric', month:'short', year:'numeric' });
-        const excerpt = a.content.substring(0, 80) + (a.content.length > 80 ? '...' : '');
+        
+        // LOGIKA BARU: Cek apakah konten cukup panjang untuk dipotong
+        const contentText = a.content || '';
+        const isLong = contentText.length > 120; // Batas 120 karakter
+        const excerpt = isLong ? contentText.substring(0, 120) + '...' : contentText;
+
         return `
             <div class="article-card">
                 <img src="${a.image_url || `https://picsum.photos/seed/art${a.id}/600/320`}" 
@@ -783,11 +788,50 @@ async function loadArticles() {
                         <span><i class="far fa-calendar"></i> ${date}</span>
                     </div>
                     <h3>${esc(a.title)}</h3>
-                    <p class="article-excerpt">${esc(excerpt)}</p>
+                    
+                    <!-- Teks Pendek (Awalnya Muncul) -->
+                    <p class="article-excerpt" id="excerpt-${a.id}" style="${isLong ? '' : 'display:none; -webkit-line-clamp: unset;'}">${esc(excerpt)}</p>
+                    
+                    <!-- Teks Lengkap (Awalnya Tersembunyi) -->
+                    <div class="article-full-content" id="full-${a.id}" style="display: none; margin-top: 10px; font-size: 0.9rem; color: var(--text-light); white-space: pre-wrap; line-height: 1.5;">${esc(contentText)}</div>
+                    
+                    <!-- Tombol Selengkapnya (Hanya muncul jika teks panjang) -->
+                    ${isLong ? `
+                    <button class="btn btn-sm btn-gray" style="margin-top: 12px; width: 100%;" onclick="toggleArticle(${a.id}, this)">
+                        <span>Baca Selengkapnya</span> <i class="fas fa-chevron-down"></i>
+                    </button>` : ''}
                 </div>
             </div>
         `;
     }).join('') : `<div class="empty-state">-</div>`;
+}
+
+// ============================
+// TOGGLE ARTIKEL (BACA SELENGKAPNYA)
+// ============================
+function toggleArticle(id, btn) {
+    const fullContent = document.getElementById(`full-${id}`);
+    const excerpt = document.getElementById(`excerpt-${id}`);
+    const btnText = btn.querySelector('span');
+    const btnIcon = btn.querySelector('i');
+
+    if (fullContent.style.display === 'none') {
+        // Tampilkan konten lengkap, sembunyikan excerpt
+        fullContent.style.display = 'block';
+        excerpt.style.display = 'none';
+        
+        // Ubah tampilan tombol menjadi "Tutup"
+        btnText.textContent = 'Tutup';
+        btnIcon.className = 'fas fa-chevron-up';
+    } else {
+        // Sembunyikan konten lengkap, tampilkan excerpt lagi
+        fullContent.style.display = 'none';
+        excerpt.style.display = 'block';
+        
+        // Kembalikan tampilan tombol
+        btnText.textContent = 'Baca Selengkapnya';
+        btnIcon.className = 'fas fa-chevron-down';
+    }
 }
 
 // ============================
@@ -1125,7 +1169,7 @@ async function deleteProject(id) {
 }
 
 // ============================
-// ARTICLES
+// ARTICLES ADMIN
 // ============================
 async function loadAdminArticles() {
     const { data } = await db.from('articles').select('*').order('created_at', { ascending: false });
